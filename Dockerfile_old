@@ -1,0 +1,15 @@
+FROM python:3.6.9
+
+LABEL version="1.0.0" description="Imagem para o projeto Creepy"
+LABEL maintainer="Herick Maia<herick9898@hotmail.com>"
+
+ADD . /code
+WORKDIR /code
+COPY . .
+
+RUN pip install --upgrade pip
+RUN pip install django
+
+EXPOSE 8000
+
+CMD ["python3", "manage.py", "runserver"]
