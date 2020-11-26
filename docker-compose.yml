@@ -1,23 +1,27 @@
 version: '3'
-  
+
 services:
-  db:
-    image: postgres
+  database:
+    container_name: container_db
+    image: postgres:alpine
     environment:
-      - POSTGRES_DB=blog
-      - POSTGRES_USER=herick_postgres
-      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=postgres_db
+      - POSTGRES_USER=postgres_user
+      - POSTGRES_PASSWORD=postgres_pass
     ports:
       - '5432'
   web:
+    container_name: container_web
     restart: always
     build: .
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: >
+            bash -c "python3 manage.py migrate
+            && python3 manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - database
     links:
-      - db:db
+      - database:database
